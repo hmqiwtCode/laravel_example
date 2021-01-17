@@ -28,6 +28,12 @@ const create = (e) => {
         });
         return;
     }
+    Swal.fire({
+        icon: 'warning',
+        title: 'Oops...',
+        text: 'Please wait...',
+    });
+    
     axios.post('api/user', {
         'name': elementForm[0].value,
         'email': elementForm[1].value,
@@ -85,6 +91,12 @@ const login = (e) => {
         });
         return;
     }
+
+    Swal.fire({
+        icon: 'warning',
+        title: 'Oops...',
+        text: 'Please wait...',
+    });
 
     axios.post('api/login', {
         'email': elementForm[0].value,

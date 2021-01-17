@@ -12,6 +12,12 @@ const update = (t,e) => {
         return;
     }
 
+    Swal.fire({
+        icon: 'warning',
+        title: 'Oops...',
+        text: 'Please wait...',
+    });
+
     axios.post(`api/${getCookie('key_api_s')}/tasks/${formElement[0].value.trim()}`,{
         'name': formElement[1].value,
         'times': formElement[2].value,
@@ -29,7 +35,7 @@ const update = (t,e) => {
           })
           Toast.fire({
             icon: 'success',
-            title: 'Signed in successfully'
+            title: 'Updated successfully'
           })
     }).catch(error => {
         Swal.fire({
