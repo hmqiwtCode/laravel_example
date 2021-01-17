@@ -33,9 +33,9 @@ const create = (e) => {
         'email': elementForm[1].value,
         'password': elementForm[2].value,
     }).then(response => {
-        console.log(response);
         const token = response.data.token
         document.cookie = 'token=' + token + '; path=/';
+        document.cookie = 'key_api_s=' + response.data.api_key + '; path=/';
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -90,9 +90,10 @@ const login = (e) => {
         'email': elementForm[0].value,
         'password': elementForm[1].value,
     }).then(response => {
-        console.log(response);
+        console.log(response.data.api_key);
         const token = response.data.token
         document.cookie = 'token=' + token + '; path=/';
+        document.cookie = 'key_api_s=' + response.data.api_key + '; path=/';
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -121,4 +122,7 @@ const login = (e) => {
     })
 
 }
+
+
+
 

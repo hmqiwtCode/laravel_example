@@ -51,7 +51,6 @@ class LoginController extends Controller
                     'token' => '00000',
                 ],
             );
-        $request->api_key = $uuid . $timestamp . $taskId;
         return $this->login($request);
     }
     public function login(Request $request)
@@ -71,11 +70,15 @@ class LoginController extends Controller
             ->limit(1)
             ->update(array('token' => $jwt_token));
 
+        $us = DB::table('users')->where('email', $input['email'])->get()[0];
+
         return response()->json([
-            'name' => $request->name,
+            'name' => $us->name,
             'email' => $input['email'],
             'token' => $jwt_token,
-            'api_key' => $request->api_key
+            'api_key' => $us->api_key
         ]);
+      //  return json_decode(json_encode($us),true);
+
     }
 }
