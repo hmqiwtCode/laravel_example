@@ -19,15 +19,16 @@
             <form class="login-form">
                 <input type="text" placeholder="Enter Email" />
                 <input type="password" placeholder="Enter Password" />
-                <button onclick="login()">Login</button>
+                <button onclick="login(event)">Login</button>
                 <p class="message">Not registered? <a href="javascript:void(0)">Create an account</a></p>
             </form>
         </div>
     </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 <script>
     $('.message a').click(function() {
         $('form').animate({

@@ -1,50 +1,124 @@
-const axios = require('axios');
-
+const email_format = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 const create = (e) => {
-    e.preventDefault();
+    e.preventDefault();  
     const elementForm = $('.register-form').children('input[type=text], input[type=password]');
-    elementForm.each((index, item) => {
-        if (item.value.trim() === '') {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Please enter value',
-            });
-            return;
-        }
-        if (index === 1) {
-            const email_format = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-            if (!(item.value.trim().match(email_format))) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Invalid Email',
-                });
-                return;
+    if (elementForm[0].value.trim().length < 5) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Please enter value',
+        });
+        return;
+    }
+
+    if (!(elementForm[1].value.trim().match(email_format))) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Invalid Email',
+        });
+        return;
+    }
+
+    if (elementForm[2].value.trim().length < 5) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Password must contain at least 5 characters',
+        });
+        return;
+    }
+    axios.post('api/user', {
+        'name': elementForm[0].value,
+        'email': elementForm[1].value,
+        'password': elementForm[2].value,
+    }).then(response => {
+        console.log(response);
+        const token = response.data.token
+        document.cookie = 'token=' + token + '; path=/';
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            },
+            didClose: () =>{
+                $(location).attr('href', 'home');
             }
-        }
-        if (index === 2) {
-            if (item.value.trim().length < 5) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Password must contain at least 5 characters',
-                });
-                return;
-            }
-        }
-    });
-    axios.get('/user?ID=12345')
-        .then(function (response) {
-            
-            console.log(response);
-        })
-        .catch(function (error) {
-            
-            console.log(error);
-        })
+          })
+          Toast.fire({
+            icon: 'success',
+            title: 'Signed in successfully'
+          })
+    }).catch(error => {
+        console.log(error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Email is already in use',
+        });
+    })
 }
 
-const login = () => {
+const login = (e) => {
+    e.preventDefault();
+    const elementForm = $('.login-form').children('input[type=text], input[type=password]');
+
+    if (!(elementForm[0].value.trim().match(email_format))) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Invalid Email',
+        });
+        return;
+    }
+
+    if (elementForm[1].value.trim().length < 5) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Password must contain at least 5 characters',
+        });
+        return;
+    }
+
+    axios.post('api/login', {
+        'email': elementForm[0].value,
+        'password': elementForm[1].value,
+    }).then(response => {
+        console.log(response);
+        const token = response.data.token
+        document.cookie = 'token=' + token + '; path=/';
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            },
+            didClose: () =>{
+                $(location).attr('href', 'home');
+            }
+          })
+          Toast.fire({
+            icon: 'success',
+            title: 'Signed in successfully'
+          })
+    }).catch(error => {
+        console.log(error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Your email or password is incorrect.Please try again',
+        });
+    })
 
 }
+
